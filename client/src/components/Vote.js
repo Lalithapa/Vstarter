@@ -1,8 +1,35 @@
-function Vote() {
+import { useEffect, useState } from "react";
+
+function Vote(props) {
+  const giveVote = async (event) => {
+    event.preventDefault();
+    const { contract } = props.state;
+    const voter_add = document.querySelector("#voterId").value;
+    const can_id = document.querySelector("#candidateId").value;
+    try {
+      await contract.methods.vote(voter_add, can_id).send({
+        from: props.account,
+        gas: "1000000",
+      });
+      alert("Vote Given Successfully");
+    } catch (error) {
+      alert(error);
+    }
+  };
+  const [status, setstatus] = useState("Not Declared");
+  useEffect(() => {
+    const { contract } = props.state;
+    const whatStatus = async () => {
+      const what_status = await contract.methods.votingStatus().call();
+      setstatus(what_status);
+    };
+    contract && whatStatus();
+  }, [props.state]);
+
   return (
     <div>
-      <form className="form" onSubmit>
-        <p className="status">Voting Status:</p>
+      <form className="form" onSubmit={giveVote}>
+        <p className="status">Voting Status: {status}</p>
         <label className="label2" htmlFor="voterId">
           VoterId:
         </label>

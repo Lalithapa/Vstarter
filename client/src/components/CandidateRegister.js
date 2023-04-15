@@ -1,7 +1,25 @@
-function Candidate() {
+import CandidateDisplay from "./CandidateDisplay";
+function CandidateRegister(props) {
+  const candidateRegister = async (event) => {
+    event.preventDefault();
+    const { contract } = props.state;
+    const _name = document.querySelector("#name").value;
+    const _party = document.querySelector("#party").value;
+    const _age = document.querySelector("#age").value;
+    const _gender = document.querySelector("#gender").value;
+    try {
+      await contract.methods
+        .candidateRegister(_name, _party, _age, _gender)
+        .send({ from: props.account, gas: "1000000" });
+      alert("Candidate Registered");
+      window.location.reload();
+    } catch (error) {
+      alert(error);
+    }
+  };
   return (
     <div>
-      <form className="form" onSubmit>
+      <form className="form" onSubmit={candidateRegister}>
         <label className="label1" htmlFor="name">
           Name:
         </label>
@@ -26,7 +44,8 @@ function Candidate() {
           Register
         </button>
       </form>
+      <CandidateDisplay state={props.state}></CandidateDisplay>
     </div>
   );
 }
-export default Candidate;
+export default CandidateRegister;

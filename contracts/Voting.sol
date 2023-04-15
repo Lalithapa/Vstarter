@@ -40,6 +40,9 @@ contract Vote {
         require(endTime > block.timestamp || stopVoting, "Voting is over");
         _;
     }
+    function getWinner() public view returns(address){
+        return winner;
+    }
 
     function voterVerification(address _person) internal view returns (bool) {
         Voter[] memory arr = new Voter[](nextVoterId - 1);
@@ -191,6 +194,7 @@ contract Vote {
     }
 
     function emergency() public {
+        require(electionCommission == msg.sender, "You are not from election commission");
         stopVoting = true;
     }
 }

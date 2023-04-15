@@ -1,5 +1,5 @@
 import { Route, Link } from "react-router-dom";
-import Candidate from "./components/CandidateRegister";
+import CandidateRegister from "./components/CandidateRegister";
 import VoterRegister from "./components/VoterRegister";
 import Winner from "./components/Winner";
 import Vote from "./contracts/Vote.json";
@@ -8,13 +8,13 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ElectionCommision from "./components/ElectionCommision";
 
-
 function App() {
   const [state, setState] = useState({
     web3: null,
     contract: null,
   });
   const [account, setAccount] = useState("Not connected");
+  const [winner, setwinner] = useState(null);
 
   useEffect(() => {
     async function init() {
@@ -59,11 +59,11 @@ function App() {
 
   return (
     <>
-    {/* <Route exact path="/">
+      {/* <Route exact path="/">
         <Intro></Intro>
       </Route> */}
       <div class="topnav">
-      <a>
+        <a>
           <Link to="/">Home</Link>
         </a>
         <a>
@@ -75,41 +75,51 @@ function App() {
         <a>
           <Link to="/electioncommision">Election Commision</Link>
         </a>
-        <a><Winner state={state}></Winner></a>
-
+        <a>
+          <Winner state={state} winner={winner} setwinner={setwinner}></Winner>
+        </a>
       </div>
-    <div className="maiNcontainer">
+      <div className="maiNcontainer">
+        {/* <Winner state={state}></Winner> */}
 
-    {/* <Winner state={state}></Winner> */}
-    
-
-      {/* <Route exact path="/">
+        {/* <Route exact path="/">
         <Intro></Intro>
       </Route> */}
-      {/* <p className="cat">Please select your account address</p> */}
+        {/* <p className="cat">Please select your account address</p> */}
 
-      
-      <p className="ca">Connected Account:{account}</p>
-      
-      <form className="label0" id="myForm">
-        <label htmlFor="">Choose an account</label>
-        <select className="innerBox" id="selectNumber" onChange={selectAccount}>
-          <option></option>
-        </select>
-      </form>
+        <p className="ca">Connected Account:{account}</p>
 
-      <Route path="/candidate">
-        <Candidate state={state} account={account}></Candidate>
-      </Route>
-      <Route path="/voter">
-        <VoterRegister state={state} account={account}></VoterRegister>
-      </Route>
-      <Route path="/electioncommision">
-        <ElectionCommision state={state} account={account}></ElectionCommision>
-      </Route>
+        <form className="label0" id="myForm">
+          <label htmlFor="">Choose an account</label>
+          <select
+            className="innerBox"
+            id="selectNumber"
+            onChange={selectAccount}
+          >
+            <option></option>
+          </select>
+        </form>
 
-      {/* <Winner state={state}></Winner> */}
-    </div>
+        <Route path="/candidate">
+          <CandidateRegister
+            state={state}
+            account={account}
+          ></CandidateRegister>
+        </Route>
+        <Route path="/voter">
+          <VoterRegister state={state} account={account}></VoterRegister>
+        </Route>
+        <Route path="/electioncommision">
+          <ElectionCommision
+            state={state}
+            account={account}
+            winner={winner}
+            setwinner={setwinner}
+          ></ElectionCommision>
+        </Route>
+
+        {/* <Winner ></Winner> */}
+      </div>
     </>
   );
 }
